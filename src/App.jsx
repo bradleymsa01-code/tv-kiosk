@@ -20,9 +20,9 @@ const getPrayerTimesForDay = (ramadanDay) => {
   const dayData = timingsData.find(d => d.ramadanDay === ramadanDay) || timingsData[0];
 
   // Convert 24-hour format to 12-hour AM/PM format
-  const formatTime = (time24) => {
+  const formatTime = (time24, forcePM = false) => {
     const [hours, minutes] = time24.split(':').map(Number);
-    const period = hours >= 12 ? 'PM' : 'AM';
+    const period = forcePM ? 'PM' : (hours >= 12 ? 'PM' : 'AM');
     const hours12 = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
     return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
   };
@@ -44,8 +44,8 @@ const getPrayerTimesForDay = (ramadanDay) => {
   // Fajr is always 10 minutes after Suhoor
   const fajr = formatTime(addMinutes(dayData.suhoor, 10));
 
-  // Maghrib is always 10 minutes after Iftar
-  const maghrib = formatTime(addMinutes(dayData.iftar, 10));
+  // Maghrib is always 10 minutes after Iftar (force PM)
+  const maghrib = formatTime(addMinutes(dayData.iftar, 10), true);
 
   return {
     month: "Ramadan",
@@ -58,7 +58,7 @@ const getPrayerTimesForDay = (ramadanDay) => {
       isha: isha,
       jummah: ["12:30 PM", "1:15 PM"],
       suhoor: formatTime(dayData.suhoor),
-      iftar: formatTime(dayData.iftar),
+      iftar: formatTime(dayData.iftar, true), // Force PM for iftar
     },
   };
 };
