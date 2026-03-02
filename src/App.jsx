@@ -66,10 +66,30 @@ const getPrayerTimesForDay = (ramadanDay) => {
 // Get prayer times based on current Ramadan day
 const prayerTimesData = getPrayerTimesForDay(getCurrentRamadanDay());
 
-const hadithData = {
-  text: "The best among you are those who have the best manners and character.",
-  source: "Sahih Bukhari",
-};
+const hadithData = [
+  {
+    narrator: "Abu Hurairah (رضي الله عنه)",
+    intro: "Abu Hurairah narrated that the Messenger of Allah ﷺ said:",
+    english:
+      '“The Muslim is the brother of the Muslim: he does not cheat him, lie to him, nor deceive him...”',
+    arabic:
+      'حَدَّثَنَا عُبَيْدُ بْنُ أَسْبَاطِ ...',
+    grade: "Hasan (Darussalam)",
+    reference: "Jami` at-Tirmidhi 1927",
+    inBook: "Book 27, Hadith 33",
+    englishTranslation: "Vol. 4, Book 1, Hadith 1927",
+  },
+  {
+    narrator: "Umar ibn al-Khattab (رضي الله عنه)",
+    intro: "The Messenger of Allah ﷺ said:",
+    english: "“Actions are only by intentions, and each person will have only what they intended.”",
+    arabic: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ ...",
+    grade: "Sahih",
+    reference: "Sahih al-Bukhari 1; Sahih Muslim 1907",
+    inBook: "Bukhari: Book 1, Hadith 1",
+    englishTranslation: "Commonly cited as Hadith of Intentions",
+  },
+];
 
 const announcementsData = [
   "Iftar & Dinner at Bradley MSA from Monday to Thursday",
