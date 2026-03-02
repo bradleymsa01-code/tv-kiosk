@@ -8,14 +8,14 @@ const prayerTimesData = {
   month: "Ramadan",
   date_range: "March 1 - March 30",
   timings: {
-    fajr: "5:12 AM",
-    dhuhr: "12:15 PM",
-    asr: "3:45 PM",
-    maghrib: "6:01 PM",
-    isha: "7:30 PM",
-    jummah: ["1:15 PM", "2:15 PM"],
-    suhoor: "4:45 AM",
-    iftar: "6:01 PM",
+    fajr: "5:20 AM",
+    dhuhr: "1:30 PM",
+    asr: "4:30 PM",
+    maghrib: "6:03 PM",
+    isha: "7:40 PM",
+    jummah: ["12:30 PM", "1:15 PM"],
+    suhoor: "5:22 AM",
+    iftar: "5:53 PM",
   },
 };
 
@@ -35,13 +35,14 @@ const announcementsData = [
 // =============================
 const SLIDE_DURATION = 10000; // 5 seconds
 
-// Bradley MSA Color Palette
+// Bradley Official Brand Color Palette
 const colors = {
-  red: "#e11837",
-  skyblue: "#a2bde0",
-  lightGrey: "#D2D3D4",
-  mediumGrey: "#939598",
-  darkGrey: "#5a5a5c",
+  bradleyRed: "#E11837",      // Primary - CMYK 0/100/80/5
+  skyBlue: "#A2BDE0",         // CMYK 35/18/1/0
+  darkRed: "#A50000",         // CMYK 0/100/80/35
+  lightGrey: "#D2D3D4",       // CMYK 0/0/0/20
+  mediumGrey: "#939598",      // CMYK 0/0/0/50
+  darkGrey: "#5A5A5C",        // CMYK 0/0/0/80
 };
 
 // =============================
@@ -98,7 +99,7 @@ export default function MosqueDisplayApp() {
       className="w-screen h-screen overflow-hidden relative"
       style={{
         background: `linear-gradient(135deg, ${colors.lightGrey}, #ffffff)`,
-        fontFamily: "'Musio Sans', 'Open Sans', sans-serif",
+        fontFamily: "'Museo Sans', 'Lato', 'Open Sans', sans-serif",
       }}
     >
       {/* Mosque Silhouette Background */}
@@ -107,16 +108,20 @@ export default function MosqueDisplayApp() {
       {/* Top Bar */}
       <div className="absolute top-0 left-0 w-full flex justify-between items-center px-10 py-6 z-10">
         <h1
-          className="text-4xl font-bold"
+          className="text-4xl font-bold uppercase tracking-tight"
           style={{
-            color: colors.red,
-            fontFamily: "'Capra Neue', 'Poppins', sans-serif",
+            color: colors.bradleyRed,
+            fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
+            letterSpacing: '-0.5px',
           }}
         >
           Bradley University MSA
         </h1>
 
-        <div className="text-3xl font-semibold" style={{ color: colors.darkGrey }}>
+        <div className="text-3xl font-semibold" style={{
+          color: colors.darkGrey,
+          fontFamily: "'Museo Sans', 'Lato', sans-serif",
+        }}>
           {formattedTime}
         </div>
       </div>
@@ -149,11 +154,14 @@ export default function MosqueDisplayApp() {
             animate={{ width: "0%" }}
             transition={{ duration: 5, ease: "linear" }}
             className="h-2"
-            style={{ backgroundColor: colors.red }}
+            style={{ backgroundColor: colors.bradleyRed }}
           />
         </div>
 
-        <div className="text-center py-2 text-lg" style={{ color: colors.darkGrey }}>
+        <div className="text-center py-2 text-lg" style={{
+          color: colors.darkGrey,
+          fontFamily: "'Museo Sans', 'Lato', sans-serif",
+        }}>
           Next Slide In: {timeLeft}s
         </div>
       </div>
@@ -162,74 +170,319 @@ export default function MosqueDisplayApp() {
 }
 
 // =============================
-// SLIDE 1: PRAYER TIMES
+// SLIDE 1: PRAYER TIMES (Professional Design)
 // =============================
 function PrayerTimesSlide() {
+  const [currentTime, setCurrentTime] = useState(new Date());
   const { month, date_range, timings } = prayerTimesData;
 
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const prayerList = [
-    { name: "Fajr", time: timings.fajr },
-    { name: "Dhuhr", time: timings.dhuhr },
-    { name: "Asr", time: timings.asr },
-    { name: "Maghrib", time: timings.maghrib },
-    { name: "Isha", time: timings.isha },
+    { name: "Fajr", arabic: "الفجر", time: timings.fajr, icon: "/fajr.svg" },
+    { name: "Dhuhr", arabic: "الظهر", time: timings.dhuhr, icon: "/zuhr.svg" },
+    { name: "Asr", arabic: "العصر", time: timings.asr, icon: "/asr.svg" },
+    { name: "Maghrib", arabic: "المغرب", time: timings.maghrib, icon: "/maghrib.svg" },
+    { name: "Isha", arabic: "العشاء", time: timings.isha, icon: "/isha.svg" },
   ];
 
+  // Calculate next prayer
+  const getNextPrayer = () => {
+    const now = currentTime;
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    for (let prayer of prayerList) {
+      const [time, period] = prayer.time.split(' ');
+      const [hours, minutes] = time.split(':').map(Number);
+      let prayerHours = hours;
+      if (period === 'PM' && hours !== 12) prayerHours += 12;
+      if (period === 'AM' && hours === 12) prayerHours = 0;
+      const prayerMinutes = prayerHours * 60 + minutes;
+
+      if (prayerMinutes > currentMinutes) {
+        const diff = prayerMinutes - currentMinutes;
+        const hoursLeft = Math.floor(diff / 60);
+        const minutesLeft = diff % 60;
+        return { name: prayer.name, hours: hoursLeft, minutes: minutesLeft };
+      }
+    }
+
+    // If no prayer left today, next is Fajr tomorrow
+    const [time, period] = prayerList[0].time.split(' ');
+    const [hours, minutes] = time.split(':').map(Number);
+    let prayerHours = hours;
+    if (period === 'PM' && hours !== 12) prayerHours += 12;
+    if (period === 'AM' && hours === 12) prayerHours = 0;
+    const prayerMinutes = prayerHours * 60 + minutes;
+    const diff = (24 * 60 - currentMinutes) + prayerMinutes;
+    const hoursLeft = Math.floor(diff / 60);
+    const minutesLeft = diff % 60;
+    return { name: prayerList[0].name, hours: hoursLeft, minutes: minutesLeft };
+  };
+
+  const nextPrayer = getNextPrayer();
+
   return (
-    <div className="w-full max-w-6xl mx-auto text-center">
-      <h2
-        className="text-6xl mb-4 font-bold"
+    <div className="w-full max-w-7xl mx-auto">
+      {/* Header Section */}
+      <div className="text-center mb-4">
+        <h2
+          className="text-5xl mb-1 font-bold uppercase tracking-tight"
+          style={{
+            color: colors.bradleyRed,
+            fontFamily: "'Bricolage Grotesque', 'Arial', sans-serif",
+            letterSpacing: '-1px',
+          }}
+        >
+          Daily Salat Timings
+        </h2>
+        <p
+          className="text-xl mb-4"
+          style={{
+            color: colors.mediumGrey,
+            fontFamily: "'Museo Sans', 'Lato', sans-serif",
+            fontWeight: 300,
+          }}
+        >
+          {month} • {date_range}
+        </p>
+      </div>
+
+      {/* Next Prayer Banner - Centralized */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="relative mx-auto max-w-5xl mb-6 overflow-hidden"
         style={{
-          color: colors.red,
-          fontFamily: "'Capra Neue', 'Poppins', sans-serif",
+          borderRadius: '12px',
         }}
       >
-        Daily Salat Timings
-      </h2>
-
-      <p
-        className="text-2xl mb-10"
-        style={{
-          color: colors.mediumGrey,
-          fontFamily: "'Bricolage Grotesque', 'Inter', sans-serif",
-        }}
-      >
-        {month} • {date_range}
-      </p>
-
-      <div className="grid grid-cols-5 gap-6 mb-10">
-        {prayerList.map((prayer) => (
-          <div
-            key={prayer.name}
-            className="rounded-2xl p-8 shadow-lg"
-            style={{ backgroundColor: "white" }}
+        <div className="flex flex-col items-center justify-center">
+          <p
+            className="text-sm mb-3 uppercase tracking-wider"
+            style={{
+              color: colors.mediumGrey,
+              fontWeight: 500,
+              fontFamily: "'Museo Sans', 'Lato', sans-serif",
+            }}
           >
-            <h3 className="text-3xl mb-3" style={{ color: colors.darkGrey }}>
-              {prayer.name}
+            Next Prayer
+          </p>
+
+          <div className="flex items-center gap-6">
+            <h3 className="text-5xl font-bold uppercase" style={{
+              fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
+              color: colors.bradleyRed,
+            }}>
+              {nextPrayer.name}
             </h3>
-            <p className="text-4xl font-bold" style={{ color: colors.red }}>
-              {prayer.time}
-            </p>
+
+            <div className="flex items-center gap-2">
+              <div className="text-center px-5 py-2" style={{
+                backgroundColor: colors.lightGrey,
+                borderRadius: '10px',
+              }}>
+                <div className="text-4xl font-bold" style={{
+                  fontFamily: "'Museo Sans', 'Lato', sans-serif",
+                  color: colors.bradleyRed,
+                }}>
+                  {String(nextPrayer.hours).padStart(2, '0')}
+                </div>
+                <div className="text-xs uppercase tracking-wide" style={{
+                  color: colors.darkGrey,
+                  fontFamily: "'Museo Sans', 'Lato', sans-serif",
+                }}>
+                  Hours
+                </div>
+              </div>
+              <div className="text-3xl font-bold" style={{
+                fontFamily: "'Museo Sans', 'Lato', sans-serif",
+                color: colors.darkGrey,
+              }}>:</div>
+              <div className="text-center px-5 py-2" style={{
+                backgroundColor: colors.lightGrey,
+                borderRadius: '10px',
+              }}>
+                <div className="text-4xl font-bold" style={{
+                  fontFamily: "'Museo Sans', 'Lato', sans-serif",
+                  color: colors.bradleyRed,
+                }}>
+                  {String(nextPrayer.minutes).padStart(2, '0')}
+                </div>
+                <div className="text-xs uppercase tracking-wide" style={{
+                  color: colors.darkGrey,
+                  fontFamily: "'Museo Sans', 'Lato', sans-serif",
+                }}>
+                  Minutes
+                </div>
+              </div>
+            </div>
           </div>
-        ))}
+        </div>
+      </motion.div>
+
+      {/* Prayer Times Grid - Clean & Corporate */}
+      <div className="grid grid-cols-5 gap-4 mb-6">
+        {prayerList.map((prayer, index) => {
+          const isNext = prayer.name === nextPrayer.name;
+          return (
+            <motion.div
+              key={prayer.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * index, duration: 0.5 }}
+              className="relative"
+              style={{
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                padding: '20px 16px',
+                boxShadow: isNext
+                  ? `0 6px 20px rgba(225, 24, 55, 0.2)`
+                  : '0 3px 12px rgba(0, 0, 0, 0.08)',
+                border: isNext ? `2px solid ${colors.bradleyRed}` : '2px solid transparent',
+                transition: 'all 0.3s ease',
+              }}
+            >
+              {/* Next Prayer Indicator */}
+              {isNext && (
+                <div
+                  className="absolute top-3 right-3 px-2 py-1 text-xs font-bold uppercase tracking-wider"
+                  style={{
+                    backgroundColor: colors.bradleyRed,
+                    color: 'white',
+                    borderRadius: '4px',
+                    fontFamily: "'Museo Sans', 'Lato', sans-serif",
+                  }}
+                >
+                  Next
+                </div>
+              )}
+
+              {/* SVG Icon */}
+              <div className="flex justify-center mb-3">
+                <img
+                  src={prayer.icon}
+                  alt={prayer.name}
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    opacity: isNext ? 1 : 0.7,
+                  }}
+                />
+              </div>
+
+              {/* Prayer Name */}
+              <h3
+                className="text-2xl font-bold text-center mb-1 uppercase"
+                style={{
+                  color: colors.darkGrey,
+                  fontFamily: "'Bricolage Grotesque', 'Arial', sans-serif",
+                }}
+              >
+                {prayer.name}
+              </h3>
+
+              {/* Arabic Name */}
+              <p
+                className="text-center mb-3 text-lg"
+                style={{
+                  color: colors.mediumGrey,
+                  fontFamily: "'Lora', 'Cambria', serif",
+                }}
+              >
+                {prayer.arabic}
+              </p>
+
+              {/* Time */}
+              <p
+                className="text-4xl font-bold text-center"
+                style={{
+                  color: colors.bradleyRed,
+                  fontFamily: "'Museo Sans', 'Lato', sans-serif",
+                }}
+              >
+                {prayer.time}
+              </p>
+            </motion.div>
+          );
+        })}
       </div>
 
-      <div className="flex justify-center gap-12 text-3xl">
-        <div>
-          <span style={{ color: colors.darkGrey }}>Jummah:</span>{" "}
-          <span style={{ color: colors.red }}>
-            {timings.jummah.join(" & ")}
-          </span>
+      {/* Additional Times - Professional Footer */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7 }}
+        className="grid grid-cols-3 gap-4 max-w-4xl mx-auto"
+      >
+        <div
+          className="p-4 text-center"
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '10px',
+            boxShadow: '0 3px 12px rgba(0, 0, 0, 0.08)',
+          }}
+        >
+          <p className="text-base mb-1 uppercase" style={{
+            color: colors.mediumGrey,
+            fontFamily: "'Museo Sans', 'Lato', sans-serif",
+          }}>
+            Jummah
+          </p>
+          <p className="text-xl font-bold" style={{
+            color: colors.bradleyRed,
+            fontFamily: "'Museo Sans', 'Lato', sans-serif",
+          }}>
+            {Array.isArray(timings.jummah) ? timings.jummah.join(" & ") : timings.jummah}
+          </p>
         </div>
-        <div>
-          <span style={{ color: colors.darkGrey }}>Suhoor:</span>{" "}
-          <span style={{ color: colors.red }}>{timings.suhoor}</span>
+        <div
+          className="p-4 text-center"
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '10px',
+            boxShadow: '0 3px 12px rgba(0, 0, 0, 0.08)',
+          }}
+        >
+          <p className="text-base mb-1 uppercase" style={{
+            color: colors.mediumGrey,
+            fontFamily: "'Museo Sans', 'Lato', sans-serif",
+          }}>
+            Suhoor Ends
+          </p>
+          <p className="text-xl font-bold" style={{
+            color: colors.bradleyRed,
+            fontFamily: "'Museo Sans', 'Lato', sans-serif",
+          }}>
+            {timings.suhoor}
+          </p>
         </div>
-        <div>
-          <span style={{ color: colors.darkGrey }}>Iftar:</span>{" "}
-          <span style={{ color: colors.red }}>{timings.iftar}</span>
+        <div
+          className="p-4 text-center"
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '10px',
+            boxShadow: '0 3px 12px rgba(0, 0, 0, 0.08)',
+          }}
+        >
+          <p className="text-base mb-1 uppercase" style={{
+            color: colors.mediumGrey,
+            fontFamily: "'Museo Sans', 'Lato', sans-serif",
+          }}>
+            Iftar Begins
+          </p>
+          <p className="text-xl font-bold" style={{
+            color: colors.bradleyRed,
+            fontFamily: "'Museo Sans', 'Lato', sans-serif",
+          }}>
+            {timings.iftar}
+          </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -241,10 +494,11 @@ function HadithSlide() {
   return (
     <div className="max-w-5xl text-center">
       <h2
-        className="text-6xl mb-12 font-bold"
+        className="text-6xl mb-12 font-bold uppercase tracking-tight"
         style={{
-          color: colors.red,
-          fontFamily: "'Capra Neue', 'Poppins', sans-serif",
+          color: colors.bradleyRed,
+          fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
+          letterSpacing: '-1px',
         }}
       >
         Hadith of the Day
@@ -252,7 +506,11 @@ function HadithSlide() {
 
       <p
         className="text-4xl leading-relaxed mb-10"
-        style={{ color: colors.darkGrey }}
+        style={{
+          color: colors.darkGrey,
+          fontFamily: "'Lora', 'Cambria', serif",
+          lineHeight: '1.6',
+        }}
       >
         "{hadithData.text}"
       </p>
@@ -261,7 +519,8 @@ function HadithSlide() {
         className="text-2xl"
         style={{
           color: colors.mediumGrey,
-          fontFamily: "'Bricolage Grotesque', 'Inter', sans-serif",
+          fontFamily: "'Museo Sans', 'Lato', sans-serif",
+          fontWeight: 300,
         }}
       >
         — {hadithData.source}
@@ -277,10 +536,11 @@ function AnnouncementSlide() {
   return (
     <div className="w-full max-w-6xl mx-auto text-center">
       <h2
-        className="text-6xl mb-12 font-bold"
+        className="text-6xl mb-12 font-bold uppercase tracking-tight"
         style={{
-          color: colors.red,
-          fontFamily: "'Capra Neue', 'Poppins', sans-serif",
+          color: colors.bradleyRed,
+          fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
+          letterSpacing: '-1px',
         }}
       >
         Announcements
@@ -294,6 +554,7 @@ function AnnouncementSlide() {
             style={{
               backgroundColor: "white",
               color: colors.darkGrey,
+              fontFamily: "'Museo Sans', 'Lato', sans-serif",
             }}
           >
             {announcement}
