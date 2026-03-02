@@ -99,15 +99,17 @@ export default function MosqueDisplayApp() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [timeLeft, setTimeLeft] = useState(5);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [hadithIndex, setHadithIndex] = useState(0);
+  const [prevSlide, setPrevSlide] = useState(0);
 
-  const slides = useMemo(
-    () => [
-      <PrayerTimesSlide key="prayer" />,
-      <HadithSlide key="hadith" />,
-      <AnnouncementSlide key="announcement" />,
-    ],
-    []
-  );
+const slides = useMemo(
+  () => [
+    <PrayerTimesSlide key="prayer" />,
+    <HadithSlide key="hadith" hadith={hadithData[hadithIndex]} />,
+    <AnnouncementSlide key="announcement" />,
+  ],
+  [hadithIndex]
+);
 
   // Live Clock (Central Time)
   useEffect(() => {
@@ -155,6 +157,15 @@ export default function MosqueDisplayApp() {
 
     return () => clearInterval(interval);
   }, [slides.length]);
+
+// Rotate hadith when entering Hadith slide
+  useEffect(() => {
+    if (currentSlide === 1 && prevSlide !== 1) {
+      setHadithIndex((i) => (i + 1) % hadithData.length);
+    }
+
+    setPrevSlide(currentSlide);
+  }, [currentSlide, prevSlide]);
 
   const formattedTime = currentTime.toLocaleTimeString("en-US", {
     hour: "2-digit",
@@ -560,11 +571,56 @@ function PrayerTimesSlide() {
 // =============================
 // SLIDE 2: HADITH
 // =============================
-function HadithSlide() {
+function useFitText({ minPx = 18, maxPx = 44, step = 2, deps = [] } = {}) {
+  const ref = React.useRef(null);
+  const [fontPx, setFontPx] = React.useState(maxPx);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let raf = 0;
+
+    const fit = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        // Start from max and shrink until it fits
+        let size = maxPx;
+        el.style.fontSize = `${size}px`;
+
+        // If content overflows the box, shrink
+        while (size > minPx && el.scrollHeight > el.clientHeight) {
+          size -= step;
+          el.style.fontSize = `${size}px`;
+        }
+
+        setFontPx(size);
+      });
+    };
+
+    fit();
+
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+
+  return { ref, fontPx };
+}
+
+function HadithSlide({ hadith }) {
+  if (!hadith) return null;
+
   return (
-    <div className="max-w-5xl text-center">
+    <div className="w-full max-w-7xl mx-auto px-6">
+      {/* Title */}
       <h2
-        className="text-6xl mb-12 font-bold uppercase tracking-tight"
+        className="text-4xl mb-4 font-bold text-center"
         style={{
           color: colors.bradleyRed,
           fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
@@ -574,31 +630,89 @@ function HadithSlide() {
         Hadith of the Day
       </h2>
 
-      <p
-        className="text-4xl leading-relaxed mb-10"
-        style={{
-          color: colors.darkGrey,
-          fontFamily: "'Lora', 'Cambria', serif",
-          lineHeight: '1.6',
-        }}
-      >
-        "{hadithData.text}"
+      {/* Narrator */}
+      <p className="text-lg mb-6 text-center" style={{ color: colors.mediumGrey }}>
+        <span className="font-semibold">{hadith.narrator}</span>
+        {hadith.intro ? <span> — {hadith.intro}</span> : null}
       </p>
 
-      <p
-        className="text-2xl"
-        style={{
-          color: colors.mediumGrey,
-          fontFamily: "'Museo Sans', 'Lato', sans-serif",
-          fontWeight: 300,
-        }}
+      {/* Two Columns */}
+      <div className="grid grid-cols-2 gap-6 items-start">
+        {/* ENGLISH */}
+        <div className="rounded-xl shadow-md p-6" style={{ backgroundColor: "white" }}>
+          <h3
+            className="text-xl font-semibold mb-3"
+            style={{ color: colors.darkGrey }}
+          >
+            English
+          </h3>
+
+          <p
+            className="text-lg leading-relaxed"
+            style={{ color: colors.darkGrey }}
+          >
+            {hadith.english}
+          </p>
+        </div>
+
+        {/* ARABIC */}
+        <div className="rounded-xl shadow-md p-6" style={{ backgroundColor: "white" }}>
+          <h3
+            className="text-xl font-semibold mb-3 text-right"
+            style={{ color: colors.darkGrey }}
+          >
+            العربية
+          </h3>
+
+          <p
+            className="text-xl leading-relaxed"
+            dir="rtl"
+            lang="ar"
+            style={{
+              color: colors.darkGrey,
+              fontFamily: "'Amiri', 'Scheherazade New', serif",
+            }}
+          >
+            {hadith.arabic}
+          </p>
+        </div>
+      </div>
+
+      {/* References */}
+      <div
+        className="mt-6 p-4 rounded-xl shadow-md text-sm"
+        style={{ backgroundColor: "white", color: colors.darkGrey }}
       >
-        — {hadithData.source}
-      </p>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+          <div>
+            <span className="font-semibold" style={{ color: colors.mediumGrey }}>
+              Grade:
+            </span>{" "}
+            {hadith.grade}
+          </div>
+          <div>
+            <span className="font-semibold" style={{ color: colors.mediumGrey }}>
+              Reference:
+            </span>{" "}
+            {hadith.reference}
+          </div>
+          <div>
+            <span className="font-semibold" style={{ color: colors.mediumGrey }}>
+              In-book:
+            </span>{" "}
+            {hadith.inBook}
+          </div>
+          <div>
+            <span className="font-semibold" style={{ color: colors.mediumGrey }}>
+              English translation:
+            </span>{" "}
+            {hadith.englishTranslation}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
-
 // =============================
 // SLIDE 3: ANNOUNCEMENTS
 // =============================
