@@ -25,15 +25,15 @@ const hadithData = {
 };
 
 const announcementsData = [
-  "Jummah Khutbah at 1:15 PM & 2:15 PM",
-  "Daily Iftar at Bradley MSA Prayer Space",
-  "Quran Circle Every Friday After Isha",
+  "Iftar & Dinner at Bradley MSA from Monday to Thursday",
+  "Please maintain the cleanliness and sanctity of the masjid. Please ensure that you dispose of trash properly and leave the prayer area, and restrooms clean for others.",
+  "Please do not park on private property or in restricted areas around the masjid. Kindly use only the designated parking spaces to respect our neighbors and avoid inconvenience."
 ];
 
 // =============================
 // GLOBAL CONSTANTS
 // =============================
-const SLIDE_DURATION = 5000; // 5 seconds
+const SLIDE_DURATION = 10000; // 5 seconds
 
 // Bradley MSA Color Palette
 const colors = {
@@ -275,7 +275,7 @@ function HadithSlide() {
 // =============================
 function AnnouncementSlide() {
   return (
-    <div className="w-full max-w-5xl text-center">
+    <div className="w-full max-w-6xl mx-auto text-center">
       <h2
         className="text-6xl mb-12 font-bold"
         style={{
