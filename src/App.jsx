@@ -1,23 +1,70 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import timingsData from "../timings.json";
 
 // =============================
-// CONFIG JSON (Editable by MSA)
+// DYNAMIC PRAYER TIMES LOGIC
 // =============================
-const prayerTimesData = {
-  month: "Ramadan",
-  date_range: "March 1 - March 30",
-  timings: {
-    fajr: "5:20 AM",
-    dhuhr: "1:30 PM",
-    asr: "4:30 PM",
-    maghrib: "6:03 PM",
-    isha: "7:40 PM",
-    jummah: ["12:30 PM", "1:15 PM"],
-    suhoor: "5:22 AM",
-    iftar: "5:53 PM",
-  },
+// Function to get current Ramadan day (you can modify this to match your logic)
+const getCurrentRamadanDay = () => {
+  // For now, return day 1. You can modify this to calculate based on current date
+  // Example: const ramadanStartDate = new Date(2025, 1, 28); // Feb 28, 2025
+  // const today = new Date();
+  // const daysDiff = Math.floor((today - ramadanStartDate) / (1000 * 60 * 60 * 24)) + 1;
+  // return Math.max(1, Math.min(30, daysDiff));
+  return 12; // Current day for testing - change this or use date calculation
 };
+
+// Function to apply special rules and format times
+const getPrayerTimesForDay = (ramadanDay) => {
+  const dayData = timingsData.find(d => d.ramadanDay === ramadanDay) || timingsData[0];
+
+  // Convert 24-hour format to 12-hour AM/PM format
+  const formatTime = (time24) => {
+    const [hours, minutes] = time24.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+    return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+  };
+
+  // Add minutes to a time string (24-hour format)
+  const addMinutes = (time24, minutesToAdd) => {
+    const [hours, minutes] = time24.split(':').map(Number);
+    const totalMinutes = hours * 60 + minutes + minutesToAdd;
+    const newHours = Math.floor(totalMinutes / 60) % 24;
+    const newMinutes = totalMinutes % 60;
+    return `${newHours}:${newMinutes.toString().padStart(2, '0')}`;
+  };
+
+  // Apply special rules
+  const dhuhr = "1:30 PM"; // Always fixed
+  const asr = ramadanDay <= 17 ? "4:30 PM" : "5:30 PM";
+  const isha = ramadanDay <= 17 ? "7:40 PM" : "8:50 PM";
+
+  // Fajr is always 10 minutes after Suhoor
+  const fajr = formatTime(addMinutes(dayData.suhoor, 10));
+
+  // Maghrib is always 10 minutes after Iftar
+  const maghrib = formatTime(addMinutes(dayData.iftar, 10));
+
+  return {
+    month: "Ramadan",
+    date_range: `Day ${ramadanDay} • ${dayData.date}`,
+    timings: {
+      fajr: fajr,
+      dhuhr: dhuhr,
+      asr: asr,
+      maghrib: maghrib,
+      isha: isha,
+      jummah: ["12:30 PM", "1:15 PM"],
+      suhoor: formatTime(dayData.suhoor),
+      iftar: formatTime(dayData.iftar),
+    },
+  };
+};
+
+// Get prayer times based on current Ramadan day
+const prayerTimesData = getPrayerTimesForDay(getCurrentRamadanDay());
 
 const hadithData = {
   text: "The best among you are those who have the best manners and character.",
