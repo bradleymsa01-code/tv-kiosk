@@ -71,7 +71,30 @@ export default function MosqueDisplayApp() {
     return () => clearInterval(clockInterval);
   }, []);
 
-  // Slide Rotation Timer
+
+  useEffect(() => {
+    const handleKeyDown = async (event) => {
+      if (
+        event.key === "4" ||
+        event.code === "Digit4" ||
+        event.code === "Numpad4"
+      ) {
+        try {
+          if (!document.fullscreenElement) {
+            await document.documentElement.requestFullscreen();
+          } else {
+            await document.exitFullscreen();
+          }
+        } catch (err) {
+          // Silently ignore fullscreen errors
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
