@@ -63,7 +63,7 @@ const getPrayerTimesForDay = (ramadanDay) => {
       asr: asr,
       maghrib: maghrib,
       isha: isha,
-      jummah: ["12:30 PM", "1:15 PM"],
+      jummah: ["1:15 PM", "2:30 PM"],
       suhoor: formatTime(dayData.suhoor),
       iftar: formatTime(dayData.iftar, true), // Force PM for iftar
     },
@@ -107,7 +107,7 @@ const announcementsData = [
 // =============================
 // GLOBAL CONSTANTS
 // =============================
-const SLIDE_DURATION = 10000; // 5 seconds
+const SLIDE_DURATION = 15000; // 15 seconds
 
 // Bradley Official Brand Color Palette
 const colors = {
@@ -124,7 +124,7 @@ const colors = {
 // =============================
 export default function MosqueDisplayApp() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [hadithIndex, setHadithIndex] = useState(0);
   const [prevSlide, setPrevSlide] = useState(0);
@@ -176,7 +176,7 @@ const slides = useMemo(
       setTimeLeft((prev) => {
         if (prev <= 1) {
           setCurrentSlide((s) => (s + 1) % slides.length);
-          return 5;
+          return 15;
         }
         return prev - 1;
       });
@@ -260,7 +260,7 @@ const slides = useMemo(
             key={currentSlide}
             initial={{ width: "100%" }}
             animate={{ width: "0%" }}
-            transition={{ duration: 5, ease: "linear" }}
+            transition={{ duration: 15, ease: "linear" }}
             className="h-2"
             style={{ backgroundColor: colors.bradleyRed }}
           />
@@ -345,7 +345,7 @@ function PrayerTimesSlide() {
             letterSpacing: '-1px',
           }}
         >
-          Daily Salat Timings
+          أوقات الصلاة
         </h2>
         <p
           className="text-xl mb-2"
