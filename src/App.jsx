@@ -5,14 +5,21 @@ import timingsData from "../timings.json";
 // =============================
 // DYNAMIC PRAYER TIMES LOGIC
 // =============================
-// Function to get current Ramadan day (you can modify this to match your logic)
+// Function to get current Ramadan day based on today's date
 const getCurrentRamadanDay = () => {
-  // For now, return day 1. You can modify this to calculate based on current date
-  // Example: const ramadanStartDate = new Date(2025, 1, 28); // Feb 28, 2025
-  // const today = new Date();
-  // const daysDiff = Math.floor((today - ramadanStartDate) / (1000 * 60 * 60 * 24)) + 1;
-  // return Math.max(1, Math.min(30, daysDiff));
-  return 12; // Current day for testing - change this or use date calculation
+  const now = new Date();
+  const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+
+  for (const entry of timingsData) {
+    const [day, mon] = entry.date.split('-');
+    const entryDate = new Date(now.getFullYear(), months[mon], parseInt(day));
+    if (now.getMonth() === entryDate.getMonth() && now.getDate() === entryDate.getDate()) {
+      return entry.ramadanDay;
+    }
+  }
+
+  // If no match found, return the last day in the data
+  return timingsData[timingsData.length - 1].ramadanDay;
 };
 
 // Function to apply special rules and format times
