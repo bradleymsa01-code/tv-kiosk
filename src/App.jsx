@@ -216,7 +216,7 @@ const slides = useMemo(
             letterSpacing: '-0.5px',
           }}
         >
-          Bradley University MSA
+          MSA Masjid
         </h1>
 
         <div className="text-3xl font-semibold" style={{
@@ -228,7 +228,7 @@ const slides = useMemo(
       </div>
 
       {/* Slide Content */}
-      <div className="w-full h-full flex items-center justify-center px-16">
+      <div className="w-full h-full flex items-start justify-center px-16 pt-24 pb-16">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -329,9 +329,9 @@ function PrayerTimesSlide() {
   return (
     <div className="w-full max-w-7xl mx-auto">
       {/* Header Section */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-2">
         <h2
-          className="text-5xl mb-1 font-bold uppercase tracking-tight"
+          className="text-4xl mb-1 font-bold uppercase tracking-tight"
           style={{
             color: colors.bradleyRed,
             fontFamily: "'Bricolage Grotesque', 'Arial', sans-serif",
@@ -341,7 +341,7 @@ function PrayerTimesSlide() {
           Daily Salat Timings
         </h2>
         <p
-          className="text-xl mb-4"
+          className="text-xl mb-2"
           style={{
             color: colors.mediumGrey,
             fontFamily: "'Museo Sans', 'Lato', sans-serif",
@@ -357,14 +357,14 @@ function PrayerTimesSlide() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative mx-auto max-w-5xl mb-6 overflow-hidden"
+        className="relative mx-auto max-w-5xl mb-3 overflow-hidden"
         style={{
           borderRadius: '12px',
         }}
       >
         <div className="flex flex-col items-center justify-center">
           <p
-            className="text-sm mb-3 uppercase tracking-wider"
+            className="text-sm mb-1 uppercase tracking-wider"
             style={{
               color: colors.mediumGrey,
               fontWeight: 500,
@@ -427,7 +427,7 @@ function PrayerTimesSlide() {
       </motion.div>
 
       {/* Prayer Times Grid - Clean & Corporate */}
-      <div className="grid grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-5 gap-4 mb-3">
         {prayerList.map((prayer, index) => {
           const isNext = prayer.name === nextPrayer.name;
           return (
@@ -440,7 +440,7 @@ function PrayerTimesSlide() {
               style={{
                 backgroundColor: 'white',
                 borderRadius: '12px',
-                padding: '20px 16px',
+                padding: '14px 16px',
                 boxShadow: isNext
                   ? `0 6px 20px rgba(225, 24, 55, 0.2)`
                   : '0 3px 12px rgba(0, 0, 0, 0.08)',
@@ -464,7 +464,7 @@ function PrayerTimesSlide() {
               )}
 
               {/* SVG Icon */}
-              <div className="flex justify-center mb-3">
+              <div className="flex justify-center mb-2">
                 <img
                   src={prayer.icon}
                   alt={prayer.name}
@@ -489,7 +489,7 @@ function PrayerTimesSlide() {
 
               {/* Arabic Name */}
               <p
-                className="text-center mb-3 text-lg"
+                className="text-center mb-2 text-lg"
                 style={{
                   color: colors.mediumGrey,
                   fontFamily: "'Lora', 'Cambria', serif",
@@ -740,7 +740,7 @@ function AnnouncementSlide() {
   return (
     <div className="w-full max-w-6xl mx-auto text-center">
       <h2
-        className="text-6xl mb-12 font-bold uppercase tracking-tight"
+        className="text-5xl mb-6 font-bold uppercase tracking-tight"
         style={{
           color: colors.bradleyRed,
           fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
@@ -750,11 +750,11 @@ function AnnouncementSlide() {
         Announcements
       </h2>
 
-      <div className="space-y-6">
+      <div className="space-y-3">
         {announcementsData.map((announcement, index) => (
           <div
             key={index}
-            className="p-6 rounded-2xl shadow-md text-3xl"
+            className="p-4 rounded-2xl shadow-md text-2xl"
             style={{
               backgroundColor: "white",
               color: colors.darkGrey,
