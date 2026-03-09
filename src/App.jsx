@@ -111,9 +111,9 @@ const hadithData = [
 ];
 
 const announcementsData = [
-  "Iftar & Dinner at Bradley MSA from Monday to Thursday",
-  "Please maintain the cleanliness and sanctity of the masjid. Please ensure that you dispose of trash properly and leave the prayer area, and restrooms clean for others.",
-  "Please do not park on private property or in restricted areas around the masjid. Kindly use only the designated parking spaces to respect our neighbors and avoid inconvenience."
+  "📢 Iftar & Dinner at Bradley MSA from Monday to Thursday",
+  "📢 Please maintain the cleanliness and sanctity of the masjid. Please ensure that you dispose of trash properly and leave the prayer area, and restrooms clean for others.",
+  "📢 Please do not park on private property or in restricted areas around the masjid. Kindly use only the designated parking spaces to respect our neighbors and avoid inconvenience."
 ];
 
 // =============================
