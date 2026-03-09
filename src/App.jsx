@@ -235,7 +235,7 @@ const slides = useMemo(
       </div>
 
       {/* Slide Content */}
-      <div className="w-full h-full flex items-start justify-center px-16 pt-24 pb-16">
+      <div className="w-full h-full flex items-start justify-center px-16 pt-14 pb-16">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -336,9 +336,9 @@ function PrayerTimesSlide() {
   return (
     <div className="w-full max-w-7xl mx-auto">
       {/* Header Section */}
-      <div className="text-center mb-2">
+      <div className="text-center mb-1">
         <h2
-          className="text-4xl mb-1 font-bold uppercase tracking-tight"
+          className="text-4xl mb-0 font-bold uppercase tracking-tight"
           style={{
             color: colors.bradleyRed,
             fontFamily: "'Bricolage Grotesque', 'Arial', sans-serif",
@@ -348,7 +348,7 @@ function PrayerTimesSlide() {
           أوقات الصلاة
         </h2>
         <p
-          className="text-xl mb-2"
+          className="text-xl mb-1"
           style={{
             color: colors.mediumGrey,
             fontFamily: "'Museo Sans', 'Lato', sans-serif",
