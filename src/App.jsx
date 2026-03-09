@@ -226,26 +226,6 @@ const slides = useMemo(
           MSA Masjid
         </h1>
 
-        <AnimatePresence mode="wait">
-          <motion.h2
-            key={currentSlide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-4xl font-bold uppercase tracking-tight"
-            style={{
-              color: colors.bradleyRed,
-              fontFamily: "'Bricolage Grotesque', 'Arial', sans-serif",
-              letterSpacing: '-1px',
-            }}
-          >
-            {currentSlide === 0 && "أوقات الصلاة"}
-            {currentSlide === 1 && "Hadith of the Day"}
-            {currentSlide === 2 && "Announcements"}
-          </motion.h2>
-        </AnimatePresence>
-
         <div className="text-3xl font-semibold" style={{
           color: colors.darkGrey,
           fontFamily: "'Museo Sans', 'Lato', sans-serif",
@@ -355,8 +335,18 @@ function PrayerTimesSlide() {
 
   return (
     <div className="w-full max-w-7xl mx-auto">
-      {/* Date Info */}
+      {/* Header Section */}
       <div className="text-center mb-1">
+        <h2
+          className="text-4xl mb-0 font-bold uppercase tracking-tight"
+          style={{
+            color: colors.bradleyRed,
+            fontFamily: "'Bricolage Grotesque', 'Arial', sans-serif",
+            letterSpacing: '-1px',
+          }}
+        >
+          أوقات الصلاة
+        </h2>
         <p
           className="text-xl mb-1"
           style={{
@@ -655,6 +645,18 @@ function HadithSlide({ hadith }) {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-6">
+      {/* Title */}
+      <h2
+        className="text-4xl mb-4 font-bold text-center"
+        style={{
+          color: colors.bradleyRed,
+          fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
+          letterSpacing: '-1px',
+        }}
+      >
+        Hadith of the Day
+      </h2>
+
       {/* Narrator */}
       <p className="text-lg mb-6 text-center" style={{ color: colors.mediumGrey }}>
         <span className="font-semibold">{hadith.narrator}</span>
@@ -744,6 +746,17 @@ function HadithSlide({ hadith }) {
 function AnnouncementSlide() {
   return (
     <div className="w-full max-w-6xl mx-auto text-center">
+      <h2
+        className="text-5xl mb-6 font-bold uppercase tracking-tight"
+        style={{
+          color: colors.bradleyRed,
+          fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
+          letterSpacing: '-1px',
+        }}
+      >
+        Announcements
+      </h2>
+
       <div className="space-y-3">
         {announcementsData.map((announcement, index) => (
           <div
