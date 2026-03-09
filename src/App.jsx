@@ -96,6 +96,18 @@ const hadithData = [
     inBook: "Bukhari: Book 1, Hadith 1",
     englishTranslation: "Commonly cited as Hadith of Intentions",
   },
+  {
+    narrator: "Ibn Umar (رضي الله عنهما)",
+    intro: "Some men amongst the companions of the Prophet (ﷺ) were shown in their dreams that the night of Qadr was in the last seven nights of Ramadan. Allah's Messenger (ﷺ) said:",
+    english:
+      '"It seems that all your dreams agree that (the Night of Qadr) is in the last seven nights, and whoever wants to search for it (i.e. the Night of Qadr) should search in the last seven (nights of Ramadan)."',
+    arabic:
+      'حَدَّثَنَا عَبْدُ اللَّهِ بْنُ يُوسُفَ، أَخْبَرَنَا مَالِكٌ، عَنْ نَافِعٍ، عَنِ ابْنِ عُمَرَ ـ رضى الله عنهما ـ أَنَّ رِجَالاً، مِنْ أَصْحَابِ النَّبِيِّ صلى الله عليه وسلم أُرُوا لَيْلَةَ الْقَدْرِ فِي الْمَنَامِ فِي السَّبْعِ الأَوَاخِرِ، فَقَالَ رَسُولُ اللَّهِ صلى الله عليه وسلم ‏ "‏ أَرَى رُؤْيَاكُمْ قَدْ تَوَاطَأَتْ فِي السَّبْعِ الأَوَاخِرِ، فَمَنْ كَانَ مُتَحَرِّيَهَا فَلْيَتَحَرَّهَا فِي السَّبْعِ الأَوَاخِرِ ‏"‏‏.‏',
+    grade: "Sahih",
+    reference: "Sahih al-Bukhari 2015",
+    inBook: "Book 32, Hadith 2",
+    englishTranslation: "Vol. 3, Book 32, Hadith 232",
+  },
 ];
 
 const announcementsData = [
