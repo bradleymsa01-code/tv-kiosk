@@ -5,14 +5,21 @@ import timingsData from "../timings.json";
 // =============================
 // DYNAMIC PRAYER TIMES LOGIC
 // =============================
-// Function to get current Ramadan day (you can modify this to match your logic)
+// Function to get current Ramadan day based on today's date
 const getCurrentRamadanDay = () => {
-  // For now, return day 1. You can modify this to calculate based on current date
-  // Example: const ramadanStartDate = new Date(2025, 1, 28); // Feb 28, 2025
-  // const today = new Date();
-  // const daysDiff = Math.floor((today - ramadanStartDate) / (1000 * 60 * 60 * 24)) + 1;
-  // return Math.max(1, Math.min(30, daysDiff));
-  return 12; // Current day for testing - change this or use date calculation
+  const now = new Date();
+  const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+
+  for (const entry of timingsData) {
+    const [day, mon] = entry.date.split('-');
+    const entryDate = new Date(now.getFullYear(), months[mon], parseInt(day));
+    if (now.getMonth() === entryDate.getMonth() && now.getDate() === entryDate.getDate()) {
+      return entry.ramadanDay;
+    }
+  }
+
+  // If no match found, return the last day in the data
+  return timingsData[timingsData.length - 1].ramadanDay;
 };
 
 // Function to apply special rules and format times
@@ -56,7 +63,7 @@ const getPrayerTimesForDay = (ramadanDay) => {
       asr: asr,
       maghrib: maghrib,
       isha: isha,
-      jummah: ["12:30 PM", "1:15 PM"],
+      jummah: ["1:15 PM", "2:30 PM"],
       suhoor: formatTime(dayData.suhoor),
       iftar: formatTime(dayData.iftar, true), // Force PM for iftar
     },
@@ -100,7 +107,7 @@ const announcementsData = [
 // =============================
 // GLOBAL CONSTANTS
 // =============================
-const SLIDE_DURATION = 10000; // 5 seconds
+const SLIDE_DURATION = 15000; // 15 seconds
 
 // Bradley Official Brand Color Palette
 const colors = {
@@ -117,7 +124,7 @@ const colors = {
 // =============================
 export default function MosqueDisplayApp() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [hadithIndex, setHadithIndex] = useState(0);
   const [prevSlide, setPrevSlide] = useState(0);
@@ -169,7 +176,7 @@ const slides = useMemo(
       setTimeLeft((prev) => {
         if (prev <= 1) {
           setCurrentSlide((s) => (s + 1) % slides.length);
-          return 5;
+          return 15;
         }
         return prev - 1;
       });
@@ -216,7 +223,7 @@ const slides = useMemo(
             letterSpacing: '-0.5px',
           }}
         >
-          Bradley University MSA
+          MSA Masjid
         </h1>
 
         <div className="text-3xl font-semibold" style={{
@@ -228,7 +235,7 @@ const slides = useMemo(
       </div>
 
       {/* Slide Content */}
-      <div className="w-full h-full flex items-center justify-center px-16">
+      <div className="w-full h-full flex items-start justify-center px-16 pt-24 pb-16">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -253,7 +260,7 @@ const slides = useMemo(
             key={currentSlide}
             initial={{ width: "100%" }}
             animate={{ width: "0%" }}
-            transition={{ duration: 5, ease: "linear" }}
+            transition={{ duration: 15, ease: "linear" }}
             className="h-2"
             style={{ backgroundColor: colors.bradleyRed }}
           />
@@ -329,19 +336,19 @@ function PrayerTimesSlide() {
   return (
     <div className="w-full max-w-7xl mx-auto">
       {/* Header Section */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-2">
         <h2
-          className="text-5xl mb-1 font-bold uppercase tracking-tight"
+          className="text-4xl mb-1 font-bold uppercase tracking-tight"
           style={{
             color: colors.bradleyRed,
             fontFamily: "'Bricolage Grotesque', 'Arial', sans-serif",
             letterSpacing: '-1px',
           }}
         >
-          Daily Salat Timings
+          أوقات الصلاة
         </h2>
         <p
-          className="text-xl mb-4"
+          className="text-xl mb-2"
           style={{
             color: colors.mediumGrey,
             fontFamily: "'Museo Sans', 'Lato', sans-serif",
@@ -357,14 +364,14 @@ function PrayerTimesSlide() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative mx-auto max-w-5xl mb-6 overflow-hidden"
+        className="relative mx-auto max-w-5xl mb-3 overflow-hidden"
         style={{
           borderRadius: '12px',
         }}
       >
         <div className="flex flex-col items-center justify-center">
           <p
-            className="text-sm mb-3 uppercase tracking-wider"
+            className="text-sm mb-1 uppercase tracking-wider"
             style={{
               color: colors.mediumGrey,
               fontWeight: 500,
@@ -427,7 +434,7 @@ function PrayerTimesSlide() {
       </motion.div>
 
       {/* Prayer Times Grid - Clean & Corporate */}
-      <div className="grid grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-5 gap-4 mb-3">
         {prayerList.map((prayer, index) => {
           const isNext = prayer.name === nextPrayer.name;
           return (
@@ -440,7 +447,7 @@ function PrayerTimesSlide() {
               style={{
                 backgroundColor: 'white',
                 borderRadius: '12px',
-                padding: '20px 16px',
+                padding: '14px 16px',
                 boxShadow: isNext
                   ? `0 6px 20px rgba(225, 24, 55, 0.2)`
                   : '0 3px 12px rgba(0, 0, 0, 0.08)',
@@ -464,7 +471,7 @@ function PrayerTimesSlide() {
               )}
 
               {/* SVG Icon */}
-              <div className="flex justify-center mb-3">
+              <div className="flex justify-center mb-2">
                 <img
                   src={prayer.icon}
                   alt={prayer.name}
@@ -489,7 +496,7 @@ function PrayerTimesSlide() {
 
               {/* Arabic Name */}
               <p
-                className="text-center mb-3 text-lg"
+                className="text-center mb-2 text-lg"
                 style={{
                   color: colors.mediumGrey,
                   fontFamily: "'Lora', 'Cambria', serif",
@@ -740,7 +747,7 @@ function AnnouncementSlide() {
   return (
     <div className="w-full max-w-6xl mx-auto text-center">
       <h2
-        className="text-6xl mb-12 font-bold uppercase tracking-tight"
+        className="text-5xl mb-6 font-bold uppercase tracking-tight"
         style={{
           color: colors.bradleyRed,
           fontFamily: "'Bebas Neue', 'Arial Narrow', sans-serif",
@@ -750,11 +757,11 @@ function AnnouncementSlide() {
         Announcements
       </h2>
 
-      <div className="space-y-6">
+      <div className="space-y-3">
         {announcementsData.map((announcement, index) => (
           <div
             key={index}
-            className="p-6 rounded-2xl shadow-md text-3xl"
+            className="p-4 rounded-2xl shadow-md text-2xl"
             style={{
               backgroundColor: "white",
               color: colors.darkGrey,
