@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import timingsData from "../timings.json";
+import uniImage from "/src/msa_bg.jpeg";
 
 // =============================
 // DYNAMIC PRAYER TIMES LOGIC
@@ -247,7 +248,7 @@ const slides = useMemo(
       </div>
 
       {/* Slide Content */}
-      <div className="w-full h-full flex items-start justify-center px-16 pt-14 pb-16">
+      <div className="relative z-10 w-full h-full flex items-start justify-center px-16 pt-14 pb-16">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -263,7 +264,7 @@ const slides = useMemo(
       </div>
 
       {/* Progress Bar + Timer */}
-      <div className="absolute bottom-0 left-0 w-full">
+      <div className="absolute bottom-0 left-0 w-full z-10">
         <div
           className="h-2"
           style={{ backgroundColor: colors.mediumGrey }}
@@ -723,30 +724,14 @@ function HadithSlide({ hadith }) {
         style={{ backgroundColor: "white", color: colors.darkGrey }}
       >
         <div className="grid grid-cols-2 gap-x-8 gap-y-2">
-          <div>
-            <span className="font-semibold" style={{ color: colors.mediumGrey }}>
-              Grade:
-            </span>{" "}
-            {hadith.grade}
-          </div>
+          
           <div>
             <span className="font-semibold" style={{ color: colors.mediumGrey }}>
               Reference:
             </span>{" "}
             {hadith.reference}
           </div>
-          <div>
-            <span className="font-semibold" style={{ color: colors.mediumGrey }}>
-              In-book:
-            </span>{" "}
-            {hadith.inBook}
-          </div>
-          <div>
-            <span className="font-semibold" style={{ color: colors.mediumGrey }}>
-              English translation:
-            </span>{" "}
-            {hadith.englishTranslation}
-          </div>
+          
         </div>
       </div>
     </div>
@@ -813,3 +798,18 @@ function MosqueBackground() {
     </div>
   );
 }
+
+// function MosqueBackground() {
+//   return (
+//     <div
+//       className="absolute inset-0 pointer-events-none z-0"
+//       style={{
+//         backgroundImage: `url(${uniImage})`,
+//         backgroundSize: "cover",
+//         backgroundPosition: "center",
+//         opacity: 0.2,
+//         grayscale: "100%",
+//       }}
+//     />
+//   );
+// }
