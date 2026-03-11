@@ -79,24 +79,24 @@ const hadithData = [
     narrator: "Abu Hurairah (رضي الله عنه)",
     intro: "Abu Hurairah narrated that the Messenger of Allah ﷺ said:",
     english:
-      '“The Muslim is the brother of the Muslim: he does not cheat him, lie to him, nor deceive him...”',
+      '“The Muslim is the brother to the Muslim, he does not cheat him, lie to him, nor deceive him. All of the Muslim is unlawful to another Muslim: His Honor, his wealth, and his blood. At-taqwa is here. It is enough evil for a man that he belittle his brother Muslim.”',
     arabic:
-      'حَدَّثَنَا عُبَيْدُ بْنُ أَسْبَاطِ ...',
+      'الْمُسْلِمُ أَخُو الْمُسْلِمِ لاَ يَخُونُهُ وَلاَ يَكْذِبُهُ وَلاَ يَخْذُلُهُ كُلُّ الْمُسْلِمِ عَلَى الْمُسْلِمِ حَرَامٌ عِرْضُهُ وَمَالُهُ وَدَمُهُ التَّقْوَى هَا هُنَا بِحَسْبِ امْرِئٍ مِنَ الشَّرِّ أَنْ يَحْتَقِرَ أَخَاهُ الْمُسْلِمَ',
     grade: "Hasan (Darussalam)",
     reference: "Jami` at-Tirmidhi 1927",
     inBook: "Book 27, Hadith 33",
     englishTranslation: "Vol. 4, Book 1, Hadith 1927",
   },
-  {
-    narrator: "Umar ibn al-Khattab (رضي الله عنه)",
-    intro: "The Messenger of Allah ﷺ said:",
-    english: "“Actions are only by intentions, and each person will have only what they intended.”",
-    arabic: "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ ...",
-    grade: "Sahih",
-    reference: "Sahih al-Bukhari 1; Sahih Muslim 1907",
-    inBook: "Bukhari: Book 1, Hadith 1",
-    englishTranslation: "Commonly cited as Hadith of Intentions",
-  },
+  // {
+  //   narrator: "Abu Sa'id (al-Khudri) (رضي الله عنه)",
+  //   intro: "The Messenger of Allah ﷺ said:",
+  //   english: "“If any Muslim clothes a Muslim when he is naked, Allah will clothe him with some green garments of Paradise; if any Muslim feeds a Muslim when he is hungry, Allah will feed him with some of the fruits of Paradise; and if any Muslim gives a Muslim drink when he is thirsty, Allah will give him some of the pure wine which is sealed to drink.”",
+  //   arabic: "أَيُّمَا مُسْلِمٍ كَسَا مُسْلِمًا ثَوْبًا عَلَى عُرْىٍ كَسَاهُ اللَّهُ مِنْ خُضْرِ الْجَنَّةِ وَأَيُّمَا مُسْلِمٍ أَطْعَمَ مُسْلِمًا عَلَى جُوعٍ أَطْعَمَهُ اللَّهُ مِنْ ثِمَارِ الْجَنَّةِ وَأَيُّمَا مُسْلِمٍ سَقَى مُسْلِمًا عَلَى ظَمَإٍ سَقَاهُ اللَّهُ مِنَ الرَّحِيقِ الْمَخْتُومِ",
+  //   grade: "",
+  //   reference: "Sunan Abi Dawud 1682",
+  //   inBook: "",
+  //   englishTranslation: "",
+  // },
   {
     narrator: "Ibn Umar (رضي الله عنهما)",
     intro: "Some men amongst the companions of the Prophet (ﷺ) were shown in their dreams that the night of Qadr was in the last seven nights of Ramadan. Allah's Messenger (ﷺ) said:",
@@ -109,6 +109,44 @@ const hadithData = [
     inBook: "Book 32, Hadith 2",
     englishTranslation: "Vol. 3, Book 32, Hadith 232",
   },
+  // {
+  //   narrator: "Atiyyah Al-'Awfi (رضي الله عنه) narrated from Abu Sa'eed Al-Khudri (رضي الله عنه)",
+  //   intro: "Some men amongst the companions of the Prophet (ﷺ) were shown in their dreams that the night of Qadr was in the last seven nights of Ramadan. Allah's Messenger (ﷺ) said:",
+  //   english:
+  //     '"Whichever believer feeds a hungry believer , Allah feeds him from the fruits of Paradise on the Day of Resurrection. Whichever believer gives drink to a thirsty believer, Allah gives him to drink from the \'sealed nectar\' on the Day of Resurrection. Whichever believer clothes a naked believer, Allah clothes him from the green garments of Paradise."',
+  //   arabic:
+  //     'أَيُّمَا مُؤْمِنٍ أَطْعَمَ مُؤْمِنًا عَلَى جُوعٍ أَطْعَمَهُ اللَّهُ يَوْمَ الْقِيَامَةِ مِنْ ثِمَارِ الْجَنَّةِ وَأَيُّمَا مُؤْمِنٍ سَقَى مُؤْمِنًا عَلَى ظَمَإٍ سَقَاهُ اللَّهُ يَوْمَ الْقِيَامَةِ مِنَ الرَّحِيقِ الْمَخْتُومِ وَأَيُّمَا مُؤْمِنٍ كَسَا مُؤْمِنًا عَلَى عُرْىٍ كَسَاهُ اللَّهُ مِنْ خُضْرِ الْجَنَّةِ',
+  //   grade: "Sahih",
+  //   reference: "Sahih al-Bukhari 2015",
+  //   inBook: "Book 32, Hadith 2",
+  //   englishTranslation: "Vol. 3, Book 32, Hadith 232",
+  // },
+  //TODO: Add more hadiths with same format
+  {
+    narrator: "Abu Hurairah (رضي الله عنه)",
+    intro: "The Prophet (ﷺ) said:",
+    english:
+      '"Whoever fasted the month of Ramadan out of sincere Faith (i.e. belief) and hoping for a reward from Allah, then all his past sins will be forgiven, and whoever stood for the prayers in the night of Qadr out of sincere Faith and hoping for a reward from Allah, then all his previous sins will be forgiven ."',
+    arabic:
+      'مَنْ صَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ، وَمَنْ قَامَ لَيْلَةَ الْقَدْرِ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ',
+    grade: "",
+    reference: "Sahih al-Bukhari 2014",
+    inBook: "",
+    englishTranslation: "",
+  },
+  {
+    narrator: "Aisha (رضي الله عنها)",
+    intro: "Allah's Messenger (ﷺ) said:",
+    english:
+      '"Search for the Night of Qadr in the odd nights of the last ten days of Ramadan."',
+    arabic:
+      'تَحَرَّوْا لَيْلَةَ الْقَدْرِ فِي الْوِتْرِ مِنَ الْعَشْرِ الأَوَاخِرِ مِنْ رَمَضَانَ',
+    grade: "",
+    reference: "Sahih al-Bukhari 2017",
+    inBook: "",
+    englishTranslation: "",
+  },
+
 ];
 
 const announcementsData = [
